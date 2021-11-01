@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WeddingAppApi.Data;
-using WeddingAppApi.Model;
+using WeddingAppApi.Models;
 
 namespace WeddingAppApi.Controllers
 {
@@ -18,7 +19,9 @@ namespace WeddingAppApi.Controllers
         public UsersController(DataContext context)
         {
             _context = context;
+        
         }
+        [Authorize]
         [HttpGet]
         public async Task< ActionResult<IEnumerable<AppUser>>> GetUsers()
         {
