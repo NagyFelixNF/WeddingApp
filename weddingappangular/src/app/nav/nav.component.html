@@ -14,7 +14,7 @@
         </ul>
 
         <div class="dropdown" *ngIf="accountService.currentUser$ | async" dropdown>
-            <a class="dropdown-toggle" dropdownToggle>Welcome user</a>
+            <a class="dropdown-toggle" dropdownToggle>Üdvözöllek {{usern}}</a>
             <div class="dropdown menu" *dropdownMenu>
               <a class="dropdown-item" (click)="logout()">Kilépés</a>
             </div>
