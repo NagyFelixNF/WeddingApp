@@ -1,0 +1,17 @@
+<div class="container mt-5 ">
+    <div *ngIf="!registerMode" style="text-align: center;">
+        <h1 class="row justify-content-center">Esküvő szervező app</h1>
+        <p class="lead row justify-content-center">Hamarosan elérhető szolgáltatásainkkal megkönnyítjük az esküvőd megtervezését!</p>
+        <div class="text-center ">
+            <button (click)="registerToggle()" class="btn btn-primary btn-lg mr-2">Regisztráció</button>
+        </div>
+    </div>
+
+    <div *ngIf="registerMode" class="container">
+        <div class="row justify-content-center">
+            <div class="col-4">
+                    <app-register [usersFromHome]="users"></app-register>
+            </div>
+        </div>
+    </div>
+</div>
