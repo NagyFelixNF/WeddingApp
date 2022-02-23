@@ -30,12 +30,12 @@ namespace WeddingAppApi.Controllers
         public async Task<ActionResult<UserObject>> Regiser(RegisterObject registerData)
         {
 
-            if(await UserExist(registerData.Username)) return BadRequest("Username is already taken!");
+            if(await UserExist(registerData.Email)) return BadRequest("Username is already taken!");
             
             using var hmac = new HMACSHA512();
             var user = new AppUser
             {
-                UserName = registerData.Username.ToLower(),
+                UserName = registerData.Email,
                 PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerData.Password)),
                 PasswordSalt = hmac.Key
             };
@@ -52,7 +52,7 @@ namespace WeddingAppApi.Controllers
         [HttpPost("Login")]
         public async Task<ActionResult<UserObject>> Login(LoginObject LoginData)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == LoginData.Username.ToLower());
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == LoginData.Email.ToLower());
             if (user == null) return Unauthorized("Invalid username!");
 
             using var hmac = new HMACSHA512(user.PasswordSalt);
