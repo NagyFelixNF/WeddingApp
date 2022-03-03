@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WeddingAppApi.Data;
 
 namespace WeddingAppApi.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220303145130_AddFKWedtoUser")]
+    partial class AddFKWedtoUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,6 +94,9 @@ namespace WeddingAppApi.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("AppUserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.ToTable("Weddings");
@@ -121,13 +126,13 @@ namespace WeddingAppApi.Data.Migrations
 
             modelBuilder.Entity("WeddingAppApi.Models.SubPreparation", b =>
                 {
-                    b.HasOne("WeddingAppApi.Models.Preparation", "Preparation")
+                    b.HasOne("WeddingAppApi.Models.Preparation", "ParentPreparation")
                         .WithMany("SubPreparations")
                         .HasForeignKey("PreparationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Preparation");
+                    b.Navigation("ParentPreparation");
                 });
 
             modelBuilder.Entity("WeddingAppApi.Models.Preparation", b =>

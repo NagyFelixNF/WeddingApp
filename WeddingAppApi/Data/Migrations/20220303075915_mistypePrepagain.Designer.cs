@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WeddingAppApi.Data;
 
 namespace WeddingAppApi.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220303075915_mistypePrepagain")]
+    partial class mistypePrepagain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,9 +37,6 @@ namespace WeddingAppApi.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("WeddingId")
-                        .IsUnique();
 
                     b.ToTable("Users");
                 });
@@ -92,20 +91,15 @@ namespace WeddingAppApi.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("AppUserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("AppUserId")
+                        .IsUnique();
+
                     b.ToTable("Weddings");
-                });
-
-            modelBuilder.Entity("WeddingAppApi.Models.AppUser", b =>
-                {
-                    b.HasOne("WeddingAppApi.Models.Wedding", "Wedding")
-                        .WithOne("AppUser")
-                        .HasForeignKey("WeddingAppApi.Models.AppUser", "WeddingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Wedding");
                 });
 
             modelBuilder.Entity("WeddingAppApi.Models.Preparation", b =>
@@ -121,24 +115,38 @@ namespace WeddingAppApi.Data.Migrations
 
             modelBuilder.Entity("WeddingAppApi.Models.SubPreparation", b =>
                 {
-                    b.HasOne("WeddingAppApi.Models.Preparation", "Preparation")
-                        .WithMany("SubPreparations")
+                    b.HasOne("WeddingAppApi.Models.Preparation", "ParentPreparation")
+                        .WithMany("SubPreparation")
                         .HasForeignKey("PreparationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Preparation");
-                });
-
-            modelBuilder.Entity("WeddingAppApi.Models.Preparation", b =>
-                {
-                    b.Navigation("SubPreparations");
+                    b.Navigation("ParentPreparation");
                 });
 
             modelBuilder.Entity("WeddingAppApi.Models.Wedding", b =>
                 {
-                    b.Navigation("AppUser");
+                    b.HasOne("WeddingAppApi.Models.AppUser", "AppUser")
+                        .WithOne("Wedding")
+                        .HasForeignKey("WeddingAppApi.Models.Wedding", "AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
+                    b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("WeddingAppApi.Models.AppUser", b =>
+                {
+                    b.Navigation("Wedding");
+                });
+
+            modelBuilder.Entity("WeddingAppApi.Models.Preparation", b =>
+                {
+                    b.Navigation("SubPreparation");
+                });
+
+            modelBuilder.Entity("WeddingAppApi.Models.Wedding", b =>
+                {
                     b.Navigation("Preparations");
                 });
 #pragma warning restore 612, 618

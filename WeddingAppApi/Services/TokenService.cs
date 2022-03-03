@@ -25,6 +25,7 @@ namespace WeddingAppApi.Services
             var Claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Name, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Sub, user.WeddingId.ToString() as string),
             };
 
             var Creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);

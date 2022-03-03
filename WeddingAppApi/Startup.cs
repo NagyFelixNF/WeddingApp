@@ -16,6 +16,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using WeddingAppApi.Data;
+using WeddingAppApi.Helpers;
 using WeddingAppApi.Interfaces;
 using WeddingAppApi.Services;
 
@@ -39,6 +40,7 @@ namespace WeddingAppApi
             });
             services.AddControllers();
             services.AddCors();
+            services.AddAutoMapper(typeof(AutoMappings).Assembly);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer( options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
@@ -48,6 +50,7 @@ namespace WeddingAppApi
                     ValidateIssuer = false,
                     ValidateAudience = false,
                 };
+                options.SaveToken = true;
             });
 
             services.AddSwaggerGen(c =>

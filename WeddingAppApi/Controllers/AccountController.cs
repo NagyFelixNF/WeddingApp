@@ -33,11 +33,17 @@ namespace WeddingAppApi.Controllers
             if(await UserExist(registerData.Email)) return BadRequest("Username is already taken!");
             
             using var hmac = new HMACSHA512();
+            var wedding = new Wedding
+            {
+                Preparations = new List<Preparation>(),
+            };
+             await _context.Weddings.AddAsync(wedding);
             var user = new AppUser
             {
                 UserName = registerData.Email,
                 PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerData.Password)),
-                PasswordSalt = hmac.Key
+                PasswordSalt = hmac.Key,
+                Wedding = wedding
             };
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
