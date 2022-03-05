@@ -13,7 +13,9 @@ namespace WeddingAppApi.Helpers
         public AutoMappings()
         {
             CreateMap<MainPreparationInputObject, Preparation >();
-             CreateMap<Preparation, MainPreparationOutputObject >();
+            CreateMap<Preparation, MainPreparationOutputObject >();
+            CreateMap<MainPreparationInputObject, SubPreparation >();
+            CreateMap<SubPreparation, MainPreparationOutputObject >();
         }
     }
 }
