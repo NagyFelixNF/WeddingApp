@@ -40,6 +40,11 @@ namespace WeddingAppApi.Controllers
         {
             string WeddingId = GetUserFromToken(await HttpContext.GetTokenAsync("access_token"));
             List<Preparation> Preparations = await _context.Preparations.Where(x => x.WeddingId == Int32.Parse(WeddingId)).Include(x => x.SubPreparations).ToListAsync();
+            foreach (var item in  Preparations)
+            {
+                item.SubPreparations.Reverse();
+            }
+            Preparations.Reverse();
             return _mapper.Map<List<MainPreparationOutputObject>>(Preparations);
         }
 
@@ -104,7 +109,7 @@ namespace WeddingAppApi.Controllers
         }
 
         [Authorize]
-        [HttpDelete("{id}")]
+        [HttpDelete("sub/{id}")]
         public async Task<ActionResult<bool>> DeleteSubTodo(int id)
         {
             var Preparation = await _context.SubPreparations.FindAsync(id);

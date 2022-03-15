@@ -10,6 +10,7 @@ namespace WeddingAppApi.DataObjects
     {
         public string Id { get; set; }
         public string Title { get; set; }
+        public bool Editing { get; set; }
         public bool Completed { get; set; }
         public List<SubPreparation> SubPreparations { get; set; }
     }

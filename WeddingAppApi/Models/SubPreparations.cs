@@ -13,7 +13,10 @@ namespace WeddingAppApi.Models
         public int Id { get; set; }
         public string Title { get; set; }
         public bool Completed { get; set; }
+        [NotMapped]        
+        public bool SubEditing { get; set; }
         [ForeignKey("Preparation")]
+        [JsonIgnore]
         public int PreparationId { get; set; }
         [JsonIgnore]
         public Preparation Preparation { get; set; }
