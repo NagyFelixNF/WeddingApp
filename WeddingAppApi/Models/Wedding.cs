@@ -13,6 +13,7 @@ namespace WeddingAppApi.Models
         public int Id { get; set; }
         public AppUser AppUser { get; set; }
         public List<Preparation> Preparations { get; set; }
+        public Budget Budget { get; set; }
         
     }
 }

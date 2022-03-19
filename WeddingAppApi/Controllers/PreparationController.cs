@@ -26,19 +26,13 @@ namespace WeddingAppApi.Controllers
             _mapper = mapper;
         }
 
-        private string GetUserFromToken(string token)
-        {
-            var handler = new JwtSecurityTokenHandler();
-            var jwtSecurityToken = handler.ReadJwtToken(token);
-            string jti = jwtSecurityToken.Claims.First(claim => claim.Type == "sub").Value;
-            return jti;
-        }
+
 
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MainPreparationOutputObject>>> GetAllTodo()
         {
-            string WeddingId = GetUserFromToken(await HttpContext.GetTokenAsync("access_token"));
+            string WeddingId = Helpers.Helpers.GetUserFromToken(await HttpContext.GetTokenAsync("access_token"));
             List<Preparation> Preparations = await _context.Preparations.Where(x => x.WeddingId == Int32.Parse(WeddingId)).Include(x => x.SubPreparations).ToListAsync();
             foreach (var item in  Preparations)
             {
@@ -54,7 +48,7 @@ namespace WeddingAppApi.Controllers
         [HttpPost]
         public async Task<ActionResult<MainPreparationOutputObject>> AddMainTodo(MainPreparationInputObject PreparationInput)
         {
-            string WeddingId = GetUserFromToken(await HttpContext.GetTokenAsync("access_token"));
+            string WeddingId = Helpers.Helpers.GetUserFromToken(await HttpContext.GetTokenAsync("access_token"));
             Preparation Preparation = _mapper.Map<Preparation>(PreparationInput);
             Preparation.Wedding = await _context.Weddings.FindAsync(Int32.Parse(WeddingId));
             await _context.Preparations.AddAsync(Preparation);
