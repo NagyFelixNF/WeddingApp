@@ -17,6 +17,7 @@ namespace WeddingAppApi.Helpers
             CreateMap<MainPreparationInputObject, SubPreparation >();
             CreateMap<SubPreparation, MainPreparationOutputObject >();
             CreateMap<Category, CategoryOutputObject>();
+            CreateMap<Guest,GuestOutputObject>();
         }
     }
 }
