@@ -55,7 +55,7 @@ namespace WeddingAppApi.Controllers
         }
 
         [Authorize]
-        [HttpPost("{id}")]
+        [HttpPost("category/{id}")]
         public async Task<ActionResult<CategoryOutputObject>> AddNewCategory(int id,Category category)
         {
             Category newCategory = category;
@@ -73,6 +73,47 @@ namespace WeddingAppApi.Controllers
             await _context.Spendings.AddAsync(newSpending);
             await _context.SaveChangesAsync();
             return newSpending;
+        }
+
+        [Authorize]
+        [HttpPatch("category/{id}")]
+        public async Task<ActionResult<CategoryOutputObject>> UpdateCategory(int id,Category category)
+        {
+            Category updateCategory = await _context.Categories.FindAsync(id);
+            updateCategory.Title = category.Title;
+            await _context.SaveChangesAsync();
+            return _mapper.Map<CategoryOutputObject>(updateCategory);
+        }
+
+        [Authorize]
+        [HttpPatch("spending/{id}")]
+        public async Task<ActionResult<Spending>> UpdateSpending(int id,Spending spending)
+        {
+            Spending updateSpending = await _context.Spendings.FindAsync(id);
+            updateSpending.Title = spending.Title;
+            updateSpending.Cost = spending.Cost;
+            await _context.SaveChangesAsync();
+            return updateSpending;
+        }
+
+        [Authorize]
+        [HttpDelete("spending/{id}")]
+        public async Task<ActionResult<bool>> DeleteSpending(int id)
+        {
+            Spending Spending = await _context.Spendings.FindAsync(id);
+            _context.Spendings.Remove(Spending);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        [Authorize]
+        [HttpDelete("category/{id}")]
+        public async Task<ActionResult<bool>> DeleteCategory(int id)
+        {
+            Category category = await _context.Categories.FindAsync(id);
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }
