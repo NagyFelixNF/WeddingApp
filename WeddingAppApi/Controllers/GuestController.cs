@@ -39,7 +39,7 @@ namespace WeddingAppApi.Controllers
                 Groom.Category="Groom";
                 Bride.Comment = Bride.Diet = Bride.Side = Bride.Name = Groom.Comment = Groom.Diet = Groom.Side = Groom.Name = "";
                 Bride.WeddingId = Groom.WeddingId = Int32.Parse(WeddingId);
-                Bride.Resonse = Groom.Resonse = GuestResponse.AcceptedBoth;
+                Bride.Response = Groom.Response = GuestResponse.AcceptedBoth;
                 await _context.Guests.AddAsync(Bride);
                 await _context.Guests.AddAsync(Groom);
                 await _context.SaveChangesAsync();
@@ -55,6 +55,19 @@ namespace WeddingAppApi.Controllers
             Guest Guest = guest;
             Guest.WeddingId = Int32.Parse(Helpers.Helpers.GetUserFromToken(await HttpContext.GetTokenAsync("access_token")));
             await _context.Guests.AddAsync(Guest);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<GuestOutputObject>(Guest);
+        }
+
+        [Authorize]
+        [HttpPatch("{id}")]
+        public async Task<ActionResult<GuestOutputObject>> GetAllTodo(int id,Guest guest)
+        {
+            Guest Guest = await _context.Guests.FindAsync(id);
+            Guest.Name = guest.Name;
+            Guest.Diet = guest.Diet;
+            Guest.Comment = guest.Comment;
+            Guest.Response = guest.Response;
             await _context.SaveChangesAsync();
             return _mapper.Map<GuestOutputObject>(Guest);
         }
