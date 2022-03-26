@@ -21,5 +21,6 @@ namespace WeddingAppApi.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Spending> Spendings { get; set; }
         public DbSet<Guest> Guests { get; set; }
+        public DbSet<Invitation> Invitations { get; set; }
     }
 }

@@ -60,6 +60,14 @@ namespace WeddingAppApi.Controllers
         }
 
         [Authorize]
+        [HttpGet("wedding")]
+        public async Task<ActionResult<string>> GetWeddingId()
+        {
+            string WeddingId = Helpers.Helpers.GetUserFromToken(await HttpContext.GetTokenAsync("access_token"));
+            return WeddingId;
+        }
+
+        [Authorize]
         [HttpPatch("{id}")]
         public async Task<ActionResult<GuestOutputObject>> GetAllTodo(int id,Guest guest)
         {
@@ -79,6 +87,15 @@ namespace WeddingAppApi.Controllers
             Guest guest = await _context.Guests.FindAsync(id);
             //TODO:Handle groom/bride
             _context.Guests.Remove(guest);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        [HttpPost("invitation")]
+        public async Task<ActionResult<Boolean>> GetAllTodo(Invitation inv)
+        {
+            Invitation invitation = inv;
+            await _context.Invitations.AddAsync(invitation);
             await _context.SaveChangesAsync();
             return true;
         }
