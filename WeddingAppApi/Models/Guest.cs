@@ -12,7 +12,7 @@ namespace WeddingAppApi.Models
         [ForeignKey("Wedding")]
         public int WeddingId { get; set; }
         public  Wedding Wedding  { get; set; }
-        public  List<Guest> Guests  { get; set; }
+        public  List<Invitation> Invitations  { get; set; }
         public string Name { get; set; }
         public string Category { get; set; }
         public GuestResponse Response { get; set; }

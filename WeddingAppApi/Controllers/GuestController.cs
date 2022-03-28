@@ -30,7 +30,7 @@ namespace WeddingAppApi.Controllers
         public async Task<ActionResult<IEnumerable<GuestOutputObject>>> GetAllTodo()
         {
             string WeddingId = Helpers.Helpers.GetUserFromToken(await HttpContext.GetTokenAsync("access_token"));
-            List<Guest> guests = await _context.Guests.Where(x => x.WeddingId == Int32.Parse(WeddingId)).ToListAsync();
+            List<Guest> guests = await _context.Guests.Where(x => x.WeddingId == Int32.Parse(WeddingId)).Include(x=> x.Invitations).ToListAsync();
             if(guests.Count() == 0)
             {
                 Guest Bride = new Guest();
@@ -52,6 +52,13 @@ namespace WeddingAppApi.Controllers
         [HttpPost()]
         public async Task<ActionResult<GuestOutputObject>> GetAllTodo(Guest guest)
         {
+            if(guest.Invitations != null)
+            {
+                Invitation inv = await _context.Invitations.FindAsync(guest.Invitations[0].Id);
+                guest.Invitations = null;
+                guest.Invitations = new List<Invitation>();
+                guest.Invitations.Add(inv);
+            }
             Guest Guest = guest;
             Guest.WeddingId = Int32.Parse(Helpers.Helpers.GetUserFromToken(await HttpContext.GetTokenAsync("access_token")));
             await _context.Guests.AddAsync(Guest);
@@ -86,6 +93,7 @@ namespace WeddingAppApi.Controllers
         {
             Guest guest = await _context.Guests.FindAsync(id);
             //TODO:Handle groom/bride
+            _context.Invitations.RemoveRange(await _context.Invitations.Where(x => x.GuestId == guest.Id).ToListAsync());
             _context.Guests.Remove(guest);
             await _context.SaveChangesAsync();
             return true;
@@ -95,9 +103,38 @@ namespace WeddingAppApi.Controllers
         public async Task<ActionResult<Boolean>> GetAllTodo(Invitation inv)
         {
             Invitation invitation = inv;
+            if(invitation.GuestId != null)
+            {
+                Guest guest = await _context.Guests.FindAsync(invitation.GuestId);
+                guest.Response = inv.Response;
+                guest.Comment = inv.Comment;
+                guest.Diet = inv.Diet;
+            }
             await _context.Invitations.AddAsync(invitation);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        [Authorize]
+        [HttpGet("invitation")]
+        public async Task<ActionResult<IEnumerable<InvitationObject>>> GetAllInvitation()
+        {
+            string WeddingId = Helpers.Helpers.GetUserFromToken(await HttpContext.GetTokenAsync("access_token"));
+            List<Invitation> invitations = await _context.Invitations.Where(x => x.WeddingId == Int32.Parse(WeddingId) && x.GuestId == null).ToListAsync();
+            return _mapper.Map<List<InvitationObject>>(invitations);
+        }
+
+        [Authorize]
+        [HttpPatch("invitation/{id}")]
+        public async Task<ActionResult<GuestOutputObject>> AddInvitationToGuest(int id,Guest guest)
+        {
+            Guest Guest = await _context.Guests.FindAsync(id);
+            Guest.Name = guest.Name;
+            Guest.Diet = guest.Diet;
+            Guest.Comment = guest.Comment;
+            Guest.Response = guest.Response;
+            await _context.SaveChangesAsync();
+            return _mapper.Map<GuestOutputObject>(Guest);
         }
     }
 }

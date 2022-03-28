@@ -6,18 +6,15 @@ using WeddingAppApi.Models;
 
 namespace WeddingAppApi.DataObjects
 {
-    public class GuestOutputObject
+    public class InvitationObject
     {
-        public int Id { get; set; }
+         public int Id { get; set; }
+        public int Weddingid { get; set; }
+        public int? Guestid { get; set; }
         public string Name { get; set; }
-        public string Category { get; set; }
         public GuestResponse Response { get; set; }
         public string Diet { get; set; }
-        public string Side { get; set; }
         public string Comment { get; set; }
-        public bool Editdiet { get; set; }
-        public bool Editcomment { get; set; }
-        public  List<InvitationObject> Invitations  { get; set; }
-
+        public string Action { get; set; }
     }
 }
