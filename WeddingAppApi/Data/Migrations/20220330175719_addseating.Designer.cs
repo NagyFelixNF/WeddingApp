@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WeddingAppApi.Data;
 
 namespace WeddingAppApi.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220330175719_addseating")]
+    partial class addseating
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,9 +102,6 @@ namespace WeddingAppApi.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Response")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("Seatid")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Side")

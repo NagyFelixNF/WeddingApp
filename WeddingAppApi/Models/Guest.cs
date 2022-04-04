@@ -19,6 +19,7 @@ namespace WeddingAppApi.Models
         public string Diet { get; set; }
         public string Side { get; set; }
         public string Comment { get; set; }
+        public int? Seatid { get; set; }
 
     }
 

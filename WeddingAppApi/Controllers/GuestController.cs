@@ -10,6 +10,8 @@ using WeddingAppApi.Data;
 using WeddingAppApi.DataObjects;
 using WeddingAppApi.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
+using System.Text.Json;
 
 namespace WeddingAppApi.Controllers
 {
@@ -83,6 +85,7 @@ namespace WeddingAppApi.Controllers
             Guest.Diet = guest.Diet;
             Guest.Comment = guest.Comment;
             Guest.Response = guest.Response;
+            Guest.Seatid = guest.Seatid;
             await _context.SaveChangesAsync();
             return _mapper.Map<GuestOutputObject>(Guest);
         }
@@ -135,6 +138,34 @@ namespace WeddingAppApi.Controllers
             Guest.Response = guest.Response;
             await _context.SaveChangesAsync();
             return _mapper.Map<GuestOutputObject>(Guest);
+        }
+
+        [Authorize]
+        [HttpGet("seat")]
+        public async Task<ActionResult<System.Text.Json.JsonDocument>> AddInvitationToGuest()
+        {
+            string WeddingId = Helpers.Helpers.GetUserFromToken(await HttpContext.GetTokenAsync("access_token"));
+            Seating seating = await _context.Seating.Where(x => x.WeddingId == Int32.Parse(WeddingId)).FirstOrDefaultAsync();
+            if(seating == default)
+            {
+                seating = new Seating();
+                seating.WeddingId = Int32.Parse(WeddingId);
+                seating.layoutjson = JsonSerializer.SerializeToUtf8Bytes("");
+                await _context.Seating.AddAsync(seating);
+                await _context.SaveChangesAsync();
+            }
+            return  JsonSerializer.Deserialize<System.Text.Json.JsonDocument>(seating.layoutjson);
+        }
+
+        [Authorize]
+        [HttpPut("seat")]
+        public async Task<ActionResult<bool>> AddInvitationToGuest([FromBody] System.Text.Json.JsonDocument entity)
+        {
+            string WeddingId = Helpers.Helpers.GetUserFromToken(await HttpContext.GetTokenAsync("access_token"));
+            Seating seating = await _context.Seating.Where(x => x.WeddingId == Int32.Parse(WeddingId)).FirstOrDefaultAsync();
+            seating.layoutjson = JsonSerializer.SerializeToUtf8Bytes(entity);
+            await _context.SaveChangesAsync();
+            return  true;
         }
     }
 }

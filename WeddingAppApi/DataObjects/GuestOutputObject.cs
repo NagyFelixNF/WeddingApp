@@ -18,6 +18,7 @@ namespace WeddingAppApi.DataObjects
         public bool Editdiet { get; set; }
         public bool Editcomment { get; set; }
         public  List<InvitationObject> Invitations  { get; set; }
+        public int? Seatid { get; set; }
 
     }
 }
