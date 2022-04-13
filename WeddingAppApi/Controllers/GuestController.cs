@@ -29,7 +29,7 @@ namespace WeddingAppApi.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GuestOutputObject>>> GetAllTodo()
+        public async Task<ActionResult<IEnumerable<GuestOutputObject>>> GetAllGuests()
         {
             string WeddingId = Helpers.Helpers.GetUserFromToken(await HttpContext.GetTokenAsync("access_token"));
             List<Guest> guests = await _context.Guests.Where(x => x.WeddingId == Int32.Parse(WeddingId)).Include(x=> x.Invitations).ToListAsync();
@@ -52,7 +52,7 @@ namespace WeddingAppApi.Controllers
 
         [Authorize]
         [HttpPost()]
-        public async Task<ActionResult<GuestOutputObject>> GetAllTodo(Guest guest)
+        public async Task<ActionResult<GuestOutputObject>> AddNewGuest(Guest guest)
         {
             if(guest.Invitations != null)
             {
@@ -78,7 +78,7 @@ namespace WeddingAppApi.Controllers
 
         [Authorize]
         [HttpPatch("{id}")]
-        public async Task<ActionResult<GuestOutputObject>> GetAllTodo(int id,Guest guest)
+        public async Task<ActionResult<GuestOutputObject>> UpdateGuest(int id,Guest guest)
         {
             Guest Guest = await _context.Guests.FindAsync(id);
             Guest.Name = guest.Name;
@@ -92,7 +92,7 @@ namespace WeddingAppApi.Controllers
 
         [Authorize]
         [HttpDelete("{id}")]
-        public async Task<ActionResult<bool>> GetAllTodo(int id)
+        public async Task<ActionResult<bool>> DeleteGuest(int id)
         {
             Guest guest = await _context.Guests.FindAsync(id);
             //TODO:Handle groom/bride
@@ -103,7 +103,7 @@ namespace WeddingAppApi.Controllers
         }
 
         [HttpPost("invitation")]
-        public async Task<ActionResult<Boolean>> GetAllTodo(Invitation inv)
+        public async Task<ActionResult<Boolean>> AddInvite(Invitation inv)
         {
             Invitation invitation = inv;
             if(invitation.GuestId != null)
@@ -151,7 +151,7 @@ namespace WeddingAppApi.Controllers
 
         [Authorize]
         [HttpGet("seat")]
-        public async Task<ActionResult<System.Text.Json.JsonDocument>> AddInvitationToGuest()
+        public async Task<ActionResult<System.Text.Json.JsonDocument>> GetSeating()
         {
             string WeddingId = Helpers.Helpers.GetUserFromToken(await HttpContext.GetTokenAsync("access_token"));
             Seating seating = await _context.Seating.Where(x => x.WeddingId == Int32.Parse(WeddingId)).FirstOrDefaultAsync();
@@ -168,7 +168,7 @@ namespace WeddingAppApi.Controllers
 
         [Authorize]
         [HttpPut("seat")]
-        public async Task<ActionResult<bool>> AddInvitationToGuest([FromBody] System.Text.Json.JsonDocument entity)
+        public async Task<ActionResult<bool>> SaveSeating([FromBody] System.Text.Json.JsonDocument entity)
         {
             string WeddingId = Helpers.Helpers.GetUserFromToken(await HttpContext.GetTokenAsync("access_token"));
             Seating seating = await _context.Seating.Where(x => x.WeddingId == Int32.Parse(WeddingId)).FirstOrDefaultAsync();
