@@ -110,8 +110,12 @@ namespace WeddingAppApi.Controllers
             {
                 Guest guest = await _context.Guests.FindAsync(invitation.GuestId);
                 guest.Response = inv.Response;
-                guest.Comment = inv.Comment;
-                guest.Diet = inv.Diet;
+                if(inv.Comment != ""){
+                guest.Comment = guest.Comment + "\n" + inv.Name + " :" + inv.Comment;
+                }
+                if(inv.Diet != ""){
+                guest.Diet = guest.Diet + "\n" + inv.Name + " :" + inv.Diet;
+                }
             }
             await _context.Invitations.AddAsync(invitation);
             await _context.SaveChangesAsync();
@@ -128,14 +132,19 @@ namespace WeddingAppApi.Controllers
         }
 
         [Authorize]
-        [HttpPatch("invitation/{id}")]
-        public async Task<ActionResult<GuestOutputObject>> AddInvitationToGuest(int id,Guest guest)
+        [HttpPatch("invitation/{guestid}")]
+        public async Task<ActionResult<GuestOutputObject>> AddInvitationToGuest(int guestid,Invitation inv)
         {
-            Guest Guest = await _context.Guests.FindAsync(id);
-            Guest.Name = guest.Name;
-            Guest.Diet = guest.Diet;
-            Guest.Comment = guest.Comment;
-            Guest.Response = guest.Response;
+            Guest Guest = await _context.Guests.FindAsync(guestid);
+            Invitation Invitation = await _context.Invitations.FindAsync(inv.Id);
+            Invitation.GuestId = Guest.Id;
+            if(inv.Diet != ""){
+            Guest.Diet = Guest.Diet + "\n" + inv.Name + " :" + inv.Diet;
+            }
+            if(inv.Comment != ""){
+            Guest.Comment = Guest.Comment + "\n" + inv.Name + " :" + inv.Comment;
+            }
+            Guest.Response = inv.Response;
             await _context.SaveChangesAsync();
             return _mapper.Map<GuestOutputObject>(Guest);
         }

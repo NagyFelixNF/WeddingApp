@@ -30,7 +30,7 @@ namespace WeddingAppApi.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MainPreparationOutputObject>>> GetAllTodo()
+        public async Task<ActionResult<IEnumerable<MainPreparationOutputObject>>> GetAllPreparations()
         {
             string WeddingId = Helpers.Helpers.GetUserFromToken(await HttpContext.GetTokenAsync("access_token"));
             List<Preparation> Preparations = await _context.Preparations.Where(x => x.WeddingId == Int32.Parse(WeddingId)).Include(x => x.SubPreparations).ToListAsync();
@@ -46,7 +46,7 @@ namespace WeddingAppApi.Controllers
         
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<MainPreparationOutputObject>> AddMainTodo(MainPreparationInputObject PreparationInput)
+        public async Task<ActionResult<MainPreparationOutputObject>> AddMainPreparations(MainPreparationInputObject PreparationInput)
         {
             string WeddingId = Helpers.Helpers.GetUserFromToken(await HttpContext.GetTokenAsync("access_token"));
             Preparation Preparation = _mapper.Map<Preparation>(PreparationInput);
@@ -58,7 +58,7 @@ namespace WeddingAppApi.Controllers
 
         [Authorize]
         [HttpPatch("{id}")]
-        public async Task<ActionResult<MainPreparationOutputObject>> UpdateMainTodo(int id,MainPreparationInputObject PreparationInput)
+        public async Task<ActionResult<MainPreparationOutputObject>> UpdateMainPreparations(int id,MainPreparationInputObject PreparationInput)
         {
             //FirstorDefault could be chaind with .include
             var Preparation = await _context.Preparations.FindAsync(id);
@@ -70,7 +70,7 @@ namespace WeddingAppApi.Controllers
 
         [Authorize]
         [HttpDelete("{id}")]
-        public async Task<ActionResult<bool>> DeleteMainTodo(int id)
+        public async Task<ActionResult<bool>> DeleteMainPreparations(int id)
         {
             var Preparation = await _context.Preparations.FindAsync(id);
             _context.Preparations.Remove(Preparation);
@@ -80,7 +80,7 @@ namespace WeddingAppApi.Controllers
 
         [Authorize]
         [HttpPost("sub/{id}")]
-        public async Task<ActionResult<MainPreparationOutputObject>> AddSubTodo(int id, MainPreparationInputObject PreparationInput)
+        public async Task<ActionResult<MainPreparationOutputObject>> AddSubPreparations(int id, MainPreparationInputObject PreparationInput)
         {
             Preparation Preparation = await _context.Preparations.FindAsync(id);
             SubPreparation SubPreparation = _mapper.Map<SubPreparation>(PreparationInput);
@@ -92,7 +92,7 @@ namespace WeddingAppApi.Controllers
 
         [Authorize]
         [HttpPatch("sub/{id}")]
-        public async Task<ActionResult<MainPreparationOutputObject>> UpdateSubTodo(int id,MainPreparationInputObject PreparationInput)
+        public async Task<ActionResult<MainPreparationOutputObject>> UpdateSubPreparations(int id,MainPreparationInputObject PreparationInput)
         {
             //FirstorDefault could be chaind with .include
             var SubPreparation = await _context.SubPreparations.FindAsync(id);
@@ -104,7 +104,7 @@ namespace WeddingAppApi.Controllers
 
         [Authorize]
         [HttpDelete("sub/{id}")]
-        public async Task<ActionResult<bool>> DeleteSubTodo(int id)
+        public async Task<ActionResult<bool>> DeleteSubPreparations(int id)
         {
             var Preparation = await _context.SubPreparations.FindAsync(id);
             _context.SubPreparations.Remove(Preparation);

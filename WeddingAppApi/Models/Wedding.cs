@@ -15,8 +15,6 @@ namespace WeddingAppApi.Models
         public List<Preparation> Preparations { get; set; }
         public Budget Budget { get; set; }
         public Seating Seating { get; set; }
-
         public List<Guest> Guests { get; set; }
-        
     }
 }
