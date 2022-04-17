@@ -16,5 +16,6 @@ namespace WeddingAppApi.Models
         public Budget Budget { get; set; }
         public Seating Seating { get; set; }
         public List<Guest> Guests { get; set; }
+        public List<Event> Events { get; set; }
     }
 }
