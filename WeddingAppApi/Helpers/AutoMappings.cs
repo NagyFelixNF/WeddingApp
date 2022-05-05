@@ -19,6 +19,7 @@ namespace WeddingAppApi.Helpers
             CreateMap<Category, CategoryOutputObject>();
             CreateMap<Guest,GuestOutputObject>();
             CreateMap<Event,EventOutputObject>();
+            CreateMap<Vendor,VendorOutputObject>();
             CreateMap<Invitation,InvitationObject>().AfterMap((src,dest) => dest.Action="add");
         }
     }

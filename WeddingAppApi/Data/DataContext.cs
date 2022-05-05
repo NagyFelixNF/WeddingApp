@@ -24,5 +24,6 @@ namespace WeddingAppApi.Data
         public DbSet<Invitation> Invitations { get; set; }
         public DbSet<Seating> Seating { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<Vendor> Vendors { get; set; }
     }
 }

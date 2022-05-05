@@ -15,6 +15,5 @@ namespace WeddingAppApi.Models
         public string Title { get; set; }
         public string Hour { get; set; }
         public string Minute { get; set; }          
-
     }
 }
